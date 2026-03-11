@@ -1,8 +1,3 @@
-// package com.hospitalmanagement.app.dto;
-
-// public class AdminDTO {
-    
-// }
 package com.hospitalmanagement.app.dto;
 
 public class AdminDTO {
