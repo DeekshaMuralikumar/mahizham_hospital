@@ -18,14 +18,12 @@ function DoctorDashboard() {
   useEffect(() => { fetchAppointments(); }, []);
 
   async function fetchAppointments() {
-    const role = localStorage.getItem("role");
-    const email = localStorage.getItem("email");
+    const userId = localStorage.getItem("userId");
     try {
-      const res = await fetch(`${API}/appointments`, {
+      const res = await fetch(`${API}/appointments/doctor/${userId}`, {
         credentials: "include",
         headers: {
-          "X-User-Email": email,
-          "X-User-Role": role
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
         }
       });
       if (res.ok) setAppointments(await res.json());

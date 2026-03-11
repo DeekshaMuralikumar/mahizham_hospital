@@ -32,6 +32,7 @@ function AdminDashboard() {
       const res = await fetch(`${API}/appointments`, {
         credentials: "include",
         headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
           "X-User-Email": email,
           "X-User-Role": role
         }
@@ -51,7 +52,11 @@ function AdminDashboard() {
     if (!window.confirm("Cancel this appointment?")) return;
     try {
       const res = await fetch(`${API}/appointments/${id}/cancel`, {
-        method: "PUT", credentials: "include"
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
       });
       if (res.ok) {
         showAlert("Appointment cancelled.", "success");
@@ -66,7 +71,10 @@ function AdminDashboard() {
     try {
       const res = await fetch(`${API}/auth/register`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
         credentials: "include",
         body: JSON.stringify({
           ...doctorForm,

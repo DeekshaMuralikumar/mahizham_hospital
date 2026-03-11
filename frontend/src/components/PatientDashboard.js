@@ -31,6 +31,7 @@ function PatientDashboard() {
       const res = await fetch(`${API}/appointments`, {
         credentials: "include",
         headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
           "X-User-Email": email,
           "X-User-Role": role
         }
@@ -97,6 +98,7 @@ function PatientDashboard() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
           "X-User-Email": email,
           "X-User-Role": role
         },
