@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/appointments")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "https://mahizham-hosp.vercel.app/")
 public class AppointmentController {
 
     private final AppointmentService appointmentService;

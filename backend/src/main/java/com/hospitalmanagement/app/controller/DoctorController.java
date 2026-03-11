@@ -9,6 +9,7 @@ import com.hospitalmanagement.app.service.DoctorService;
 @RestController
 @RequestMapping("/api/doctor")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "https://mahizham-hosp.vercel.app/")
 public class DoctorController {
 
     private final DoctorService doctorService;
