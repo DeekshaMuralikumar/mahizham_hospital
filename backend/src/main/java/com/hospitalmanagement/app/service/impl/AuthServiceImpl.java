@@ -1,5 +1,6 @@
 package com.hospitalmanagement.app.service.impl;
 
+import com.hospitalmanagement.app.config.JwtUtils;
 import com.hospitalmanagement.app.dto.LoginRequestDTO;
 import com.hospitalmanagement.app.dto.RegisterRequestDTO;
 import com.hospitalmanagement.app.dto.UserResponseDTO;
@@ -20,6 +21,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
 
     @Override
     public String register(RegisterRequestDTO request) {
@@ -67,12 +69,15 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Invalid Password");
         }
 
+        String token = jwtUtils.generateToken(user.getEmail());
+
         return new UserResponseDTO(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
                 user.getRole(),
-                user.getSpecialization()
+                user.getSpecialization(),
+                token
         );
     }
 }
