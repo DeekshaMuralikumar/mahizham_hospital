@@ -16,7 +16,7 @@ import java.util.List;
 @CrossOrigin(origins = "https://mahizham-hosp.vercel.app/")
 public class AppointmentController {
 
-    private final AppointmentService appointmentService;
+    private final AppointmentService appointmentService = null;
 
     //POST /api/appointments
     @PostMapping
