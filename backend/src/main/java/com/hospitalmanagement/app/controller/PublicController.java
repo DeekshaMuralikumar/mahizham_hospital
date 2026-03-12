@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/public")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://mahizham-hosp.vercel.app/")
 public class PublicController {
 
     private final UserRepository userRepository;
