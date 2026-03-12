@@ -56,10 +56,12 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
             "https://mahizham-hosp.vercel.app",
             "https://mahizham-hosp.vercel.app/",
-            "https://mahizham-hospital.onrender.com"
+            "https://mahizham-hospital.onrender.com",
+            "http://localhost:3000",
+            "http://localhost:5173"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-User-Email", "X-User-Role"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
