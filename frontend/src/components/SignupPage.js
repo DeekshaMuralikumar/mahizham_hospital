@@ -15,12 +15,6 @@ function SignupPage() {
     mobile: ""
   });
 
-  // const calculateAge = (dob) => {
-  //   const birthDate = new Date(dob);
-  //   const today = new Date();
-  //   let age = today.getFullYear() - birthDate.getFullYear();
-  //   return age;
-  // };
 
   const handleSubmit = async () => {
     // Basic validation
