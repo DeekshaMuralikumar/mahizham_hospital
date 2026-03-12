@@ -39,8 +39,6 @@ public class SecurityConfig {
             )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/").permitAll()
-                .requestMatchers("https://mahizham-hosp-659blbuye-deeksha-muralikumars-projects.vercel.app").permitAll() 
-                .requestMatchers("https://mahizham-hosp-659blbuye-deeksha-muralikumars-projects.vercel.app/**").permitAll() 
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/public/**").permitAll()
                 .requestMatchers("/swagger-ui/**").permitAll()
