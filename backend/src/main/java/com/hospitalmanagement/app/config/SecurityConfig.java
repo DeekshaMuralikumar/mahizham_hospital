@@ -56,6 +56,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
             "https://mahizham-hospital.vercel.app/",
             "https://mahizham-hospital.vercel.app",
+            "https://mahizhamhospital.vercel.app",
+            "https://mahizhamhospital.vercel.app/",
             "https://mahizham-hospital.onrender.com",
             "http://localhost:3000",
             "http://localhost:5173"

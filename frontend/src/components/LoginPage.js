@@ -26,11 +26,13 @@ function LoginPage() {
       localStorage.setItem("email", dummyAdmin.email);
       localStorage.setItem("userId", dummyAdmin.id);
       localStorage.setItem("name", dummyAdmin.name);
+      alert("Logged in as Guest Admin. Backend requests may fail as no token is generated.");
       navigate("/admin");
       return;
     }
 
     try {
+      localStorage.clear(); // Clear all old items before login
       const response = await axiosConfig.post("/api/auth/login", {
         email: enteredEmail,
         password: enteredPassword

@@ -17,7 +17,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtils {
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.secret:9a613478d0526e8574100b213c4a6316209a613478d0526e8574100b213c4a6316}")
     private String secret;
 
     private final long expiration = 86400000; // 24 hours

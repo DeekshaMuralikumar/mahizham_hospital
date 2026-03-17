@@ -24,17 +24,24 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null) {
+            authHeader = request.getHeader("authorization");
+        }
+
+        System.out.println("--- Request: " + request.getMethod() + " " + request.getRequestURI() + " ---");
+        System.out.println("Auth Header Present: " + (authHeader != null));
 
         String email = null;
         String jwt = null;
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            jwt = authHeader.substring(7);
+        if (authHeader != null && authHeader.toLowerCase().startsWith("bearer ")) {
+            jwt = authHeader.substring(7).trim();
             try {
                 email = jwtUtils.extractEmail(jwt);
+                System.out.println("Extracted Email from JWT: " + email);
             } catch (Exception e) {
-                // Log error or handle invalid token
+                System.err.println("JWT Extraction Failed: " + e.getMessage());
             }
         }
 
@@ -46,6 +53,9 @@ public class JwtFilter extends OncePerRequestFilter {
                         email, null, new ArrayList<>());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                System.out.println("User Authenticated: " + email);
+            } else {
+                System.out.println("JWT Validation Failed for: " + email);
             }
         }
         filterChain.doFilter(request, response);
