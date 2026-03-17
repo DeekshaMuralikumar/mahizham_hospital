@@ -33,7 +33,11 @@ function DoctorDashboard() {
   async function handleConfirm(id) {
     try {
       const res = await fetch(`${API}/doctor/appointments/${id}/confirm`, {
-        method: "PUT", credentials: "include"
+        method: "PUT", 
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
+        credentials: "include"
       });
       if (res.ok) { showAlert("Appointment confirmed!", "success"); fetchAppointments(); }
       else showAlert("Failed to confirm.", "error");
@@ -47,7 +51,10 @@ function DoctorDashboard() {
     try {
       const res = await fetch(`${API}/doctor/${doctorId}/slots`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
         credentials: "include",
         body: JSON.stringify(slotForm)
       });
