@@ -1,7 +1,4 @@
-
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./LoginPage.css";
+import axiosConfig from "../api/axiosConfig";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -32,38 +29,25 @@ function LoginPage() {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: enteredEmail, password: enteredPassword })
+      const response = await axiosConfig.post("/api/auth/login", {
+        email: enteredEmail,
+        password: enteredPassword
       });
 
-      if (response.ok) {
-        const user = await response.json();
-        localStorage.setItem("token", user.token);
-        localStorage.setItem("role", user.role);
-        localStorage.setItem("email", user.email);
-        localStorage.setItem("userId", user.id);
-        localStorage.setItem("name", user.name);
+      const user = response.data;
+      localStorage.setItem("token", user.token);
+      localStorage.setItem("role", user.role);
+      localStorage.setItem("email", user.email);
+      localStorage.setItem("userId", user.id);
+      localStorage.setItem("name", user.name);
 
-        if (user.role === "ADMIN") navigate("/admin");
-        else if (user.role === "DOCTOR") navigate("/doctor");
-        else if (user.role === "PATIENT") navigate("/patient");
-      } else {
-        let errorMsg = "Invalid credentials";
-        try {
-          const errData = await response.json();
-          errorMsg = errData.message || errorMsg;
-        } catch (e) {
-          // Fallback if not JSON
-          const raw = await response.text();
-          if (raw && raw.length < 100) errorMsg = raw;
-        }
-        alert(errorMsg);
-      }
+      if (user.role === "ADMIN") navigate("/admin");
+      else if (user.role === "DOCTOR") navigate("/doctor");
+      else if (user.role === "PATIENT") navigate("/patient");
     } catch (error) {
       console.error("Login Error:", error);
-      alert("Network error. Is the backend running?");
+      const errorMsg = error.response?.data?.message || error.response?.data || "Invalid credentials or network error";
+      alert(typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg));
     }
   };
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
+import axiosConfig from "../api/axiosConfig";
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -38,33 +39,23 @@ function SignupPage() {
       return;
     }
 
-    const API_BASE = process.env.REACT_APP_API_BASE || "https://mahizham-hospital.onrender.com";
-
     try {
-      const response = await fetch(`${API_BASE}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          dob: formData.dob,
-          gender: formData.gender,
-          mobile: formData.mobile,
-          role: "PATIENT"
-        })
+      await axiosConfig.post("/api/auth/register", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        dob: formData.dob,
+        gender: formData.gender,
+        mobile: formData.mobile,
+        role: "PATIENT"
       });
 
-      if (response.ok) {
-        alert("Signup Successful. Please Login.");
-        navigate("/");
-      } else {
-        const errorMsg = await response.text();
-        alert(errorMsg || "Signup failed");
-      }
+      alert("Signup Successful. Please Login.");
+      navigate("/");
     } catch (error) {
       console.error("Signup Error:", error);
-      alert("Network error. Is the backend running?");
+      const errorMsg = error.response?.data?.message || error.response?.data || "Signup failed";
+      alert(typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg));
     }
   };
 

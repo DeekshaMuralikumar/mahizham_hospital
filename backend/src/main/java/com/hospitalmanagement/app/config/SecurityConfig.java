@@ -54,8 +54,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
-            "https://mahizhamhospital.vercel.app/",
-            "https://mahizhamhospital.vercel.app",
+            "https://mahizham-hospital.vercel.app/",
+            "https://mahizham-hospital.vercel.app",
             "https://mahizham-hospital.onrender.com",
             "http://localhost:3000",
             "http://localhost:5173"

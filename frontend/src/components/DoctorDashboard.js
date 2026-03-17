@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
-
-const API = (process.env.REACT_APP_API_BASE || "https://mahizham-hospital.onrender.com") + "/api";
+import axiosConfig from "../api/axiosConfig";
 
 function DoctorDashboard() {
   const navigate = useNavigate();
@@ -20,27 +19,16 @@ function DoctorDashboard() {
   async function fetchAppointments() {
     const userId = localStorage.getItem("userId");
     try {
-      const res = await fetch(`${API}/appointments/doctor/${userId}`, {
-        credentials: "include",
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        }
-      });
-      if (res.ok) setAppointments(await res.json());
+      const res = await axiosConfig.get(`/api/appointments/doctor/${userId}`);
+      setAppointments(res.data);
     } catch (e) { console.error(e); }
   }
 
   async function handleConfirm(id) {
     try {
-      const res = await fetch(`${API}/doctor/appointments/${id}/confirm`, {
-        method: "PUT", 
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
-        credentials: "include"
-      });
-      if (res.ok) { showAlert("Appointment confirmed!", "success"); fetchAppointments(); }
-      else showAlert("Failed to confirm.", "error");
+      await axiosConfig.put(`/api/doctor/appointments/${id}/confirm`);
+      showAlert("Appointment confirmed!", "success");
+      fetchAppointments();
     } catch (e) { showAlert("Network error.", "error"); }
   }
 
@@ -49,19 +37,9 @@ function DoctorDashboard() {
     setLoading(true);
     const doctorId = localStorage.getItem("userId");
     try {
-      const res = await fetch(`${API}/doctor/${doctorId}/slots`, {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
-        credentials: "include",
-        body: JSON.stringify(slotForm)
-      });
-      if (res.ok) {
-        showAlert("Slot added successfully!", "success");
-        setSlotForm({ date: "", startTime: "", endTime: "" });
-      } else showAlert("Failed to add slot.", "error");
+      await axiosConfig.post(`/api/doctor/${doctorId}/slots`, slotForm);
+      showAlert("Slot added successfully!", "success");
+      setSlotForm({ date: "", startTime: "", endTime: "" });
     } catch (e) { showAlert("Network error.", "error"); }
     finally { setLoading(false); }
   }

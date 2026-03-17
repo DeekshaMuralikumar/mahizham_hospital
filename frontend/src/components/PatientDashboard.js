@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
-
-const API = (process.env.REACT_APP_API_BASE || "https://mahizham-hospital.onrender.com") + "/api";
+import axiosConfig from "../api/axiosConfig";
 
 function PatientDashboard() {
   const navigate = useNavigate();
@@ -28,36 +27,34 @@ function PatientDashboard() {
     const role = localStorage.getItem("role");
     const email = localStorage.getItem("email");
     try {
-      const res = await fetch(`${API}/appointments`, {
-        credentials: "include",
+      const res = await axiosConfig.get("/api/appointments", {
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
           "X-User-Email": email,
           "X-User-Role": role
         }
       });
-      if (res.ok) setAppointments(await res.json());
+      setAppointments(res.data);
     } catch (e) { console.error(e); }
   }
 
   async function fetchSpecializations() {
     try {
-      const res = await fetch(`${API}/public/specializations`, { credentials: "include" });
-      if (res.ok) setSpecializations(await res.json());
+      const res = await axiosConfig.get("/api/public/specializations");
+      setSpecializations(res.data);
     } catch (e) { console.error(e); }
   }
 
   async function fetchDoctorsBySpecialization(spec) {
     try {
-      const res = await fetch(`${API}/public/doctors?specialization=${encodeURIComponent(spec)}`, { credentials: "include" });
-      if (res.ok) setDoctors(await res.json());
+      const res = await axiosConfig.get(`/api/public/doctors?specialization=${encodeURIComponent(spec)}`);
+      setDoctors(res.data);
     } catch (e) { console.error(e); }
   }
 
   async function fetchSlots(doctorId) {
     try {
-      const res = await fetch(`${API}/public/doctors/${doctorId}/slots`, { credentials: "include" });
-      if (res.ok) setSlots(await res.json());
+      const res = await axiosConfig.get(`/api/public/doctors/${doctorId}/slots`);
+      setSlots(res.data);
     } catch (e) { console.error(e); }
   }
 
@@ -94,33 +91,26 @@ function PatientDashboard() {
     try {
       const email = localStorage.getItem("email");
       const role = localStorage.getItem("role");
-      const res = await fetch(`${API}/appointments`, {
-        method: "POST",
+      await axiosConfig.post("/api/appointments", {
+        doctorId: Number(bookForm.doctorId),
+        appointmentDate: bookForm.appointmentDate,
+        startTime: bookForm.startTime,
+        endTime: bookForm.endTime
+      }, {
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
           "X-User-Email": email,
           "X-User-Role": role
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          doctorId: Number(bookForm.doctorId),
-          appointmentDate: bookForm.appointmentDate,
-          startTime: bookForm.startTime,
-          endTime: bookForm.endTime
-        })
+        }
       });
-      if (res.ok) {
-        showAlert("Appointment booked successfully!", "success");
-        setShowModal(false);
-        setBookForm({ specialization: "", doctorId: "", slotId: "", appointmentDate: "", startTime: "", endTime: "" });
-        setDoctors([]); setSlots([]);
-        fetchAppointments();
-      } else {
-        const err = await res.json();
-        showAlert(err.message || "Booking failed.", "error");
-      }
-    } catch (e) { showAlert("Network error.", "error"); }
+      showAlert("Appointment booked successfully!", "success");
+      setShowModal(false);
+      setBookForm({ specialization: "", doctorId: "", slotId: "", appointmentDate: "", startTime: "", endTime: "" });
+      setDoctors([]); setSlots([]);
+      fetchAppointments();
+    } catch (e) {
+      const errorMsg = e.response?.data?.message || e.response?.data || "Booking failed.";
+      showAlert(typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg), "error");
+    }
     finally { setLoading(false); }
   }
 

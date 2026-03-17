@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
-
-const API = (process.env.REACT_APP_API_BASE || "https://mahizham-hospital.onrender.com") + "/api";
+import axiosConfig from "../api/axiosConfig";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -29,39 +28,29 @@ function AdminDashboard() {
     const role = localStorage.getItem("role");
     const email = localStorage.getItem("email");
     try {
-      const res = await fetch(`${API}/appointments`, {
-        credentials: "include",
+      const res = await axiosConfig.get("/api/appointments", {
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
           "X-User-Email": email,
           "X-User-Role": role
         }
       });
-      if (res.ok) setAppointments(await res.json());
+      setAppointments(res.data);
     } catch (e) { console.error(e); }
   }
 
   async function fetchDoctors() {
     try {
-      const res = await fetch(`${API}/public/doctors`, { credentials: "include" });
-      if (res.ok) setDoctors(await res.json());
+      const res = await axiosConfig.get("/api/public/doctors");
+      setDoctors(res.data);
     } catch (e) { console.error(e); }
   }
 
   async function handleCancelAppointment(id) {
     if (!window.confirm("Cancel this appointment?")) return;
     try {
-      const res = await fetch(`${API}/appointments/${id}/cancel`, {
-        method: "PUT",
-        credentials: "include",
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        }
-      });
-      if (res.ok) {
-        showAlert("Appointment cancelled.", "success");
-        fetchAppointments();
-      } else showAlert("Failed to cancel.", "error");
+      await axiosConfig.put(`/api/appointments/${id}/cancel`);
+      showAlert("Appointment cancelled.", "success");
+      fetchAppointments();
     } catch (e) { showAlert("Network error.", "error"); }
   }
 
@@ -69,29 +58,19 @@ function AdminDashboard() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${API}/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          ...doctorForm,
-          departmentName: doctorForm.department, // Map 'department' to 'departmentName'
-          role: "DOCTOR"
-        })
+      await axiosConfig.post("/api/auth/register", {
+        ...doctorForm,
+        departmentName: doctorForm.department, // Map 'department' to 'departmentName'
+        role: "DOCTOR"
       });
-      if (res.ok) {
-        showAlert("Doctor added successfully!", "success");
-        setShowAddDoctor(false);
-        setDoctorForm({ name: "", email: "", password: "", specialization: "", department: "" });
-        fetchDoctors();
-      } else {
-        const err = await res.json();
-        showAlert(err.message || "Failed to add doctor.", "error");
-      }
-    } catch (e) { showAlert("Network error.", "error"); }
+      showAlert("Doctor added successfully!", "success");
+      setShowAddDoctor(false);
+      setDoctorForm({ name: "", email: "", password: "", specialization: "", department: "" });
+      fetchDoctors();
+    } catch (e) {
+      const errorMsg = e.response?.data?.message || e.response?.data || "Failed to add doctor.";
+      showAlert(typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg), "error");
+    }
     finally { setLoading(false); }
   }
 
