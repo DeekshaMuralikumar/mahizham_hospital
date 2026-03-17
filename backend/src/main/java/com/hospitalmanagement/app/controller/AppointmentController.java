@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AppointmentController {
 
-    private final AppointmentService appointmentService = null;
+    private final AppointmentService appointmentService;
 
     //POST /api/appointments
     @PostMapping
