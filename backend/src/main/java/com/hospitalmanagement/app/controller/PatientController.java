@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/patient")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://mahizham-hosp.vercel.app/")
+@CrossOrigin(origins = "https://mahizhamhospital.vercel.app")
 public class PatientController {
 
     private final PatientService patientService;

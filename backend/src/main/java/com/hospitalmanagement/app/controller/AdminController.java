@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-@CrossOrigin(origins = "https://mahizham-hosp.vercel.app/")
+@CrossOrigin(origins = {"https://mahizhamhospital.vercel.app", "http://localhost:3000", "http://localhost:5173", "https://mahizham-hospital.onrender.com"})
 public class AdminController {
 
     @Autowired
