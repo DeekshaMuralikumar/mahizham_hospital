@@ -1,4 +1,3 @@
-
 package com.hospitalmanagement.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-@CrossOrigin(origins = {"https://mahizhamhospital.vercel.app", "http://localhost:3000", "http://localhost:5173", "https://mahizham-hospital.onrender.com"})
 public class AdminController {
 
     @Autowired

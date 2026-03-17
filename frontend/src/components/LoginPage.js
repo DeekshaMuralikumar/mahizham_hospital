@@ -9,6 +9,8 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const API_BASE = process.env.REACT_APP_API_BASE || "https://mahizham-hospital.onrender.com";
+
   const handleLogin = async () => {
     const enteredEmail = email.trim();
     const enteredPassword = password.trim();
@@ -30,7 +32,7 @@ function LoginPage() {
     }
 
     try {
-      const response = await fetch("https://mahizham-hospital.onrender.com/api/auth/login", {
+      const response = await fetch(`${API_BASE}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: enteredEmail, password: enteredPassword })

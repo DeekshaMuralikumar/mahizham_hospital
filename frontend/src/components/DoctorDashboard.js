@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 
-const API = "https://mahizham-hospital.onrender.com/api";
+const API = (process.env.REACT_APP_API_BASE || "https://mahizham-hospital.onrender.com") + "/api";
 
 function DoctorDashboard() {
   const navigate = useNavigate();

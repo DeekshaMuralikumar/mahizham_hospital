@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import com.hospitalmanagement.app.dto.AvailableSlotRequestDTO;
 import com.hospitalmanagement.app.service.DoctorService;
 
+
 @RestController
 @RequestMapping("/api/doctor")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"https://mahizhamhospital.vercel.app", "http://localhost:3000", "http://localhost:5173", "https://mahizham-hospital.onrender.com"})
 public class DoctorController {
 
     private final DoctorService doctorService;
@@ -32,7 +32,8 @@ public class DoctorController {
     }
 
     @PutMapping("/appointments/{appointmentId}/confirm")
-    public ResponseEntity<?> confirmAppointment(
+ 
+   public ResponseEntity<?> confirmAppointment(
             @PathVariable Long appointmentId) {
 
         return ResponseEntity.ok(

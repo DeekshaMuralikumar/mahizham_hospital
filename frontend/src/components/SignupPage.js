@@ -38,8 +38,10 @@ function SignupPage() {
       return;
     }
 
+    const API_BASE = process.env.REACT_APP_API_BASE || "https://mahizham-hospital.onrender.com";
+
     try {
-      const response = await fetch("https://mahizham-hospital.onrender.com/api/auth/register", {
+      const response = await fetch(`${API_BASE}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
