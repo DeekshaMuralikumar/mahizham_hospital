@@ -37,6 +37,22 @@ function DoctorDashboard() {
     } catch (e) { showAlert("Network error.", "error"); }
   }
 
+  async function handleCancel(id) {
+    try {
+      await axiosConfig.put(`/api/doctor/appointments/${id}/cancel`);
+      showAlert("Appointment cancelled!", "success");
+      fetchAppointments();
+    } catch (e) { showAlert("Network error.", "error"); }
+  }
+
+  async function handleComplete(id) {
+    try {
+      await axiosConfig.put(`/api/doctor/appointments/${id}/complete`);
+      showAlert("Appointment marked as completed!", "success");
+      fetchAppointments();
+    } catch (e) { showAlert("Network error.", "error"); }
+  }
+
   async function handleAddSlot(e) {
     e.preventDefault();
     setLoading(true);
@@ -138,11 +154,23 @@ function DoctorDashboard() {
                             <td>{a.startTime} – {a.endTime}</td>
                             <td><StatusBadge status={a.status} /></td>
                             <td>
-                              {a.status === "BOOKED" && (
-                                <button className="btn btn-success btn-sm" onClick={() => handleConfirm(a.id)}>
-                                  Confirm
-                                </button>
-                              )}
+                              <div style={{ display: "flex", gap: "8px" }}>
+                                {a.status === "BOOKED" && (
+                                  <>
+                                    <button className="btn btn-success btn-sm" onClick={() => handleConfirm(a.id)}>
+                                      Confirm
+                                    </button>
+                                    <button className="btn btn-danger btn-sm" onClick={() => handleCancel(a.id)}>
+                                      Cancel
+                                    </button>
+                                  </>
+                                )}
+                                {a.status === "CONFIRMED" && (
+                                  <button className="btn btn-primary btn-sm" onClick={() => handleComplete(a.id)}>
+                                    Complete
+                                  </button>
+                                )}
+                              </div>
                             </td>
                           </tr>
                         ))}

@@ -66,4 +66,24 @@ public class DoctorServiceImpl implements DoctorService {
 
         return "Appointment Confirmed";
     }
+
+    @Override
+    @Transactional
+    public String cancelAppointment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+        appointment.setStatus(AppointmentStatus.CANCELLED);
+        appointmentRepository.save(appointment);
+        return "Appointment Cancelled";
+    }
+
+    @Override
+    @Transactional
+    public String completeAppointment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+        appointment.setStatus(AppointmentStatus.COMPLETED);
+        appointmentRepository.save(appointment);
+        return "Appointment Completed";
+    }
 }

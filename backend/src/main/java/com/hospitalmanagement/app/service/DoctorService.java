@@ -12,4 +12,6 @@ public interface DoctorService {
     List<Appointment> getDoctorAppointments(Long doctorId);
 
     String confirmAppointment(Long appointmentId);
+    String cancelAppointment(Long appointmentId);
+    String completeAppointment(Long appointmentId);
 }

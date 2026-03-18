@@ -39,4 +39,18 @@ public class DoctorController {
         return ResponseEntity.ok(
                 doctorService.confirmAppointment(appointmentId));
     }
+
+    @PutMapping("/appointments/{appointmentId}/cancel")
+    public ResponseEntity<?> cancelAppointment(
+            @PathVariable Long appointmentId) {
+        return ResponseEntity.ok(
+                doctorService.cancelAppointment(appointmentId));
+    }
+
+    @PutMapping("/appointments/{appointmentId}/complete")
+    public ResponseEntity<?> completeAppointment(
+            @PathVariable Long appointmentId) {
+        return ResponseEntity.ok(
+                doctorService.completeAppointment(appointmentId));
+    }
 }
