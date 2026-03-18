@@ -17,9 +17,14 @@ function DoctorDashboard() {
   useEffect(() => { fetchAppointments(); }, []);
 
   async function fetchAppointments() {
-    const userId = localStorage.getItem("userId");
+    const role = localStorage.getItem("role");
     try {
-      const res = await axiosConfig.get(`/api/appointments/doctor/${userId}`);
+      const res = await axiosConfig.get("/api/appointments", {
+        headers: {
+          "X-User-Email": email,
+          "X-User-Role": role
+        }
+      });
       setAppointments(res.data);
     } catch (e) { console.error(e); }
   }
